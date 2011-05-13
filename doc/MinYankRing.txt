@@ -1,0 +1,20 @@
+A minimalistic reimplementation of YankRing.vim.
+
+Design goals:
+- Keep the code small and maintainable.
+- Remap as few keys as possible to interfere with vim's default behaviour as
+  little as possible.
+
+Design:
+- Restrict it to cycling through the "0 to "9 registers. That way, we don't have
+  to create a mapping for each and every command that yanks but let vim handle
+  it instead.
+
+Script outline:
+. nmap p and P to script commands.
+. nmap <c-n>/<c-p> after a paste was made and nunmap them afterwards (problem:
+  how to detect this "afterwards"?).
+. Find the last pasted area (should be easy enough using `[ and `]).
+. Write a replacement command for that area, making sure it doesn't screw up the
+  numbered registers.
+. Profit!
