@@ -6,9 +6,9 @@ Design goals:
   little as possible.
 
 Design:
-- Restrict it to cycling through the "0 to "9 registers. That way, we don't have
-  to create a mapping for each and every command that yanks but let vim handle
-  it instead.
+- Restrict it to cycling through the register used for the paste and the
+  numbered registers. That way, we don't have to create a mapping for each and
+  every command that yanks but let vim handle it instead.
 
 Script outline:
 . nmap p and P to script commands.
