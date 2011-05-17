@@ -1,6 +1,7 @@
 let s:regIndex = -1
 let s:cmdReg   = '"'
 let s:pasteFun = "P"
+let s:pastePos = []
 let s:numReg   = {}
 let s:ignoreCursorMoved = 0
 
@@ -23,12 +24,11 @@ endfunction
 function! s:MYR_Replace()
 	let l:reg = -1 == s:regIndex ? s:cmdReg : s:regIndex
 	let s:ignoreCursorMoved = 1
-	undo
+	keepjumps undo
 	let s:ignoreCursorMoved = 1
-	" FIXME:
-	" If the paste went to the very end of the file (i.e. was appended),
-	" the [ mark will be invalid.
-	execute 'normal!`["' . l:reg . 'P'
+	keepjumps call setpos(".", s:pastePos)
+	let s:ignoreCursorMoved = 1
+	keepjumps execute 'normal!"' . l:reg . s:pasteFun
 endfunction
 
 function! MYR_ReplaceNext()
@@ -59,6 +59,7 @@ function! MYR_Paste(reg, pasteFun)
 	let s:regIndex = -1
 	let s:cmdReg   = a:reg
 	let s:pasteFun = a:pasteFun
+	let s:pastePos = getpos(".")
 	execute 'normal!"' . a:reg . a:pasteFun
 	" FIXME:
 	" Don't know why, but the paste command above seems to trigger the
