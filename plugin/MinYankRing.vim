@@ -16,14 +16,14 @@ function! s:MYR_Replace()
 	keepjumps execute 'normal!"' . l:reg . s:pasteFun
 endfunction
 
-function! MYR_ReplaceNext()
+function! s:MYR_ReplaceNext()
 	let s:regIndex = s:regIndex == 9 ? -1 : (s:regIndex + 1)
-	call s:MYR_Replace()
+	call <SID>MYR_Replace()
 endfunction
 
-function! MYR_ReplacePrev()
+function! s:MYR_ReplacePrev()
 	let s:regIndex = s:regIndex == -1 ? 9 : (s:regIndex - 1)
-	call s:MYR_Replace()
+	call <SID>MYR_Replace()
 endfunction
 
 function! s:MYR_Abort()
@@ -38,7 +38,7 @@ function! s:MYR_Abort()
 	augroup END
 endfunction
 
-function! MYR_Paste(reg, pasteFun)
+function! s:MYR_Paste(reg, pasteFun)
 	let s:regIndex = -1
 	let s:cmdReg   = a:reg
 	let s:pasteFun = a:pasteFun
@@ -48,13 +48,13 @@ function! MYR_Paste(reg, pasteFun)
 	" Don't know why, but the paste command above seems to trigger the
 	" autocommand defined below.
 	let s:ignoreCursorMoved = 1
-	nnoremap <silent> <buffer> <script> <C-N> :call MYR_ReplaceNext()<CR>
-	nnoremap <silent> <buffer> <script> <C-P> :call MYR_ReplacePrev()<CR>
+	nnoremap <silent> <buffer> <C-N> :call <SID>MYR_ReplaceNext()<CR>
+	nnoremap <silent> <buffer> <C-P> :call <SID>MYR_ReplacePrev()<CR>
 	augroup MYR
 		au!
-		au CursorMoved * call s:MYR_Abort()
+		au CursorMoved * call <SID>MYR_Abort()
 	augroup END
 endfunction
 
-nnoremap <silent> <script> P :call MYR_Paste(v:register, 'P')<CR>
-nnoremap <silent> <script> p :call MYR_Paste(v:register, 'p')<CR>
+nnoremap <silent> P :call <SID>MYR_Paste(v:register, 'P')<CR>
+nnoremap <silent> p :call <SID>MYR_Paste(v:register, 'p')<CR>
