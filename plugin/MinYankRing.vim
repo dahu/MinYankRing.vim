@@ -3,25 +3,8 @@ let s:regIndex = -1  " Current register index. -1 for s:cmdReg, 0-9 for the
 let s:cmdReg   = '"' " Register used with the initial paste.
 let s:pasteFun = "P" " Paste command used. Either P or p.
 let s:pastePos = []  " Cursor position when paste was issued.
-let s:numReg   = {}  " Backup dictionary of the numbered registers.
 let s:ignoreCursorMoved = 0 " When != 0, the CursorMoved event will not abort
                             " the kill-ring mode.
-
-function! s:MYR_StoreNumberedRegisters()
-	" FIXME:
-	" Do I need to store the contents of s:cmdReg, too? E.g. what happens
-	" if s:cmdReg is one of the numbered registers?
-	let s:numReg = {}
-	for i in range(10)
-		let s:numReg[i] = @i
-	endfor
-endfunction
-
-function! s:MYR_RestoreNumberedRegisters()
-	for i in range(10)
-		let @i = s:numReg[i]
-	endfor
-endfunction
 
 function! s:MYR_Replace()
 	let l:reg = -1 == s:regIndex ? s:cmdReg : s:regIndex
@@ -48,7 +31,6 @@ function! s:MYR_Abort()
 		let s:ignoreCursorMoved = 0
 		return
 	endif
-	call s:MYR_RestoreNumberedRegisters()
 	nunmap <buffer> <C-N>
 	nunmap <buffer> <C-P>
 	augroup MYR
@@ -57,7 +39,6 @@ function! s:MYR_Abort()
 endfunction
 
 function! MYR_Paste(reg, pasteFun)
-	call s:MYR_StoreNumberedRegisters()
 	let s:regIndex = -1
 	let s:cmdReg   = a:reg
 	let s:pasteFun = a:pasteFun
