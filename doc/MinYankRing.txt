@@ -65,9 +65,10 @@ or |p| commands to cycle through the numbered registers as well as the
 register that was originally pasted from. This facilitates replacing already
 done pastes with previous contents of the unnamed register.
 
-As soon as the user moves the cursor, the CTRL-N and CTRL-P keys are
-automatically unmapped until the next paste is performed. This makes sure
-MinYankRing really stays out of the user's way as much as possible.
+As soon as the user moves the cursor or leaves the current buffer, the CTRL-N
+and CTRL-P keys are automatically unmapped until the next paste is performed.
+This makes sure MinYankRing really stays out of the user's way as much as
+possible.
 
 ==============================================================================
 

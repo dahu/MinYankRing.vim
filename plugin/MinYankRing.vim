@@ -52,7 +52,7 @@ function! s:MYR_Paste(reg, pasteFun)
 	nnoremap <silent> <buffer> <C-P> :call <SID>MYR_ReplacePrev()<CR>
 	augroup MYR
 		au!
-		au CursorMoved * call <SID>MYR_Abort()
+		au CursorMoved,BufLeave * call <SID>MYR_Abort()
 	augroup END
 endfunction
 
