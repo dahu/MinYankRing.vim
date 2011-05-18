@@ -1,20 +1,74 @@
-A minimalistic reimplementation of YankRing.vim.
+*MinYankRing.txt*	For Vim version 7.3	Last change: 2011 May 18
 
-Design goals:
-- Keep the code small and maintainable.
-- Remap as few keys as possible to interfere with vim's default behaviour as
-  little as possible.
+Author:		Timo Schmiade
+Version:	1.0
 
-Design:
-- Restrict it to cycling through the register used for the paste and the
-  numbered registers. That way, we don't have to create a mapping for each and
-  every command that yanks but let vim handle it instead.
+==============================================================================
 
-Script outline:
-. nmap p and P to script commands.
-. nmap <c-n>/<c-p> after a paste was made and nunmap them afterwards (problem:
-  how to detect this "afterwards"?).
-. Find the last pasted area (should be easy enough using `[ and `]).
-. Write a replacement command for that area, making sure it doesn't screw up the
-  numbered registers.
-. Profit!
+1. Motivation					*MinYankRing-motivation*
+
+MinYankRing aims to be a minimalistic reimplementation of YankRing.vim by
+David Fishburn which is available at:
+
+http://www.vim.org/scripts/script.php?script_id=1234
+
+MinYankRing only implements a very small subset of YankRing.vim's features
+while striving to achieve two essential design goals which YankRing.vim lacks
+in the eyes of this script's author:
+
+1. Keep the code-base small and maintainable.
+2. Remap as few keys as possible to interfere with vim's default behaviour as
+   little as possible.
+
+On the other hand, YankRing.vim provides the following features which are not
+available in MinYankRing:
+
+- Define the size of the kill-ring.
+- Provide a split window displaying the kill-ring, including the option to
+  select the element to paste.
+- Store the kill-ring in a configurable file to make it available to multiple
+  instances of vim.
+
+==============================================================================
+
+2. Installation					*MinYankRing-installation*
+
+Just extract the plugin archive into your ~/.vim directory. It consists of two
+files: >
+    plugin/MinYankRing.vim
+    doc/MinYankRing.txt
+<
+After that, you should run vim and update the help tags file via >
+    :helptags ~/.vim/doc
+<
+==============================================================================
+
+3. Introduction					*MinYankRing-introduction*
+
+MinYankRing provides a simple approximation of what the kill-ring is for
+Emacs. Whenever the user deletes or yanks something, it is automatically
+stored in the unnamed register (|quote_quote|) and the numbered registers "0
+to "9 (|quote-number|).
+
+When yanking or pasting, the unnamed register is taken as the respective
+target or source of the operation by default. Thus, it regularly occurs that
+the user mistakenly overwrites the unnamed register and realizes it only when
+he tries to paste from it.
+
+The numbered registers still contain the information, but it is tedious work
+to undo the paste, look at the output of the :reg command to see which
+numbered register is the right one and select that register as the source for
+the (repeated) paste.
+
+MinYankRing offers the keys CTRL-N and CTRL-P right after pasting via the |P|
+or |p| commands to cycle through the numbered registers as well as the
+register that was originally pasted from. This facilitates replacing already
+done pastes with previous contents of the unnamed register.
+
+As soon as the user moves the cursor, the CTRL-N and CTRL-P keys are
+automatically unmapped until the next paste is performed. This makes sure
+MinYankRing really stays out of the user's way as much as possible.
+
+==============================================================================
+
+ vim: set tw=78 ts=8 ft=help norl:

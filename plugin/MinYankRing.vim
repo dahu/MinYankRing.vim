@@ -1,9 +1,11 @@
-let s:regIndex = -1
-let s:cmdReg   = '"'
-let s:pasteFun = "P"
-let s:pastePos = []
-let s:numReg   = {}
-let s:ignoreCursorMoved = 0
+let s:regIndex = -1  " Current register index. -1 for s:cmdReg, 0-9 for the
+                     " respective numbered register.
+let s:cmdReg   = '"' " Register used with the initial paste.
+let s:pasteFun = "P" " Paste command used. Either P or p.
+let s:pastePos = []  " Cursor position when paste was issued.
+let s:numReg   = {}  " Backup dictionary of the numbered registers.
+let s:ignoreCursorMoved = 0 " When != 0, the CursorMoved event will not abort
+                            " the kill-ring mode.
 
 function! s:MYR_StoreNumberedRegisters()
 	" FIXME:
